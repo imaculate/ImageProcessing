@@ -1,71 +1,64 @@
-#ifndef HUFFNMANODE_H
-#define HUFFNMANODE_H
+#ifndef IMAGE_H
+#define IMAGE_H
 #include <memory>
-class Image
-{
- private:
-   int width, height;
-   std::unique_ptr<unsigned char[]> data;
+#include <iostream>
+#include <string>
+using namespace std;
+class iterator;
+namespace MSHIMA001{
+   class Image
+   {
+   private:
    
- public:
- 
-   Image(); // default constructor - define in .cpp
-   Image(int width int height string filename);
-   ~Image(); // destructor - define in .cpp file
-  
+      int width, height;
+      unique_ptr<unsigned char[]> data;
+      friend class iterator;
+   
+   public:
+   
+      Image(); // default constructor - define in .cpp
+      Image(int w, int h, string fileName);
+      ~Image(); // destructor - define in .cpp file
+   
    //copy constructor
-   Image(const Image& N);
+      Image(const Image& N);
    
    //move constructor
-   Image(Image&& N); 
+      Image(Image&& N); 
    
    //assignment operator
    
-  Image& operator=(const Image& N );
+      Image& operator=(const Image& N );
    //move assignment operator.
    
-   Image& operator=(Image&& N);
+      Image& operator=(Image&& N);
    
    //method to read input files
-  unsigned char**  readImages(std::string baseName);
-  
-   iterator begin(void); // etc
-   iterator end(void);
+   Image& operator!();
+      bool  load(std::string fileName);
+      void save(std::string fileName );
    
-    Image& operator+(const Image& N );
-    Image& operator-(const Image& N );
-    Image& operator/(const Image& N );
-    Image& operator*(const Image& N );
-    ofstream& operator<<(const Image& N );
-    ofstream& operator>>(const Image& N );
-
-
-
-
-
+      Image::iterator begin(void); // etc
+      Image::iterator end(void);
+   
+      Image& operator+(const Image& N );
+      Image& operator-(const Image& N );
+      Image& operator/(const Image& N );
+      Image& operator*(int f );
+      ofstream& operator<<(const Image& N );
+      ofstream& operator>>(const Image& N );
+   
+   
+   
+   
+   
     
-
    
    
-   class iterator
-   {
-   private:
-      unsigned char *ptr;
-      // grant private access to Image class functions
-      friend class Image;
-    // construct only via Image class (begin/end)
- 
-       iterator(u_char *p) : ptr(p) {}
-
-    public:
-       //copy construct is public
-         iterator( const iterator & rhs) : ptr(rhs.ptr) {}
-         // define overloaded ops: *, ++, --, =
-         iterator & operator=(const iterator & rhs)
-          {...}
- // other methods for iterator
-      };
- 
-     };
+   
+      class iterator;
+         
+     
+     }
      
 #endif

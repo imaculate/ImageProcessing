@@ -14,53 +14,93 @@ using namespace MSHIMA001;
 
 
 int main(int argc, char**  argv) {
-   if(argc <3){
-      cout<<"You should have at least 2 parameters, enter the name of of headerfile"<<endl;
-      return 0;
-   }
-  
-  
-   string readfile  = string(argv[1])+ ".txt";
-   unordered_map<char, int> Map ; 
-   string input = getFreq(readfile, Map);
-   
   
    
-  
-   //create map for th character to codes.
-   HuffmanTree tree;
-   tree.buildTree(Map);
-     
-   unordered_map<char, string> map;
-   
-  
-   
-   const HuffmanNode& T = *(tree.root);
-   
-   tree.getCodes(T, "",map );
-   
-   //output table to outputfile.hdr;
-   string headerfile = string(argv[2]) + ".hdr" ;
-	//cout<<"header "<<headerfile<<endl;
-   ofstream header(headerfile, ios::out);
-   cout<<map.size()<<endl;
-   header<<map.size()<<"\n";
-   for( auto i = map.begin(); i != map.end(); ++i){
-      cout<<(i->first)<<" "<<(i->second)<<endl;
-      header<<(i->first)<<" "<<(i->second)<<"\n";
-   }
-   
-   header.close();
-   
-   string output = compress(input, map);
-   int  N = output.size();
-   int nbytes = (N/8) + (N%8 ? 1 : 0); 
-   cout<<"nbytes "<<nbytes<<endl;
-
+    if(argc<3){
+      //error handling.
+		   cout<<"Enter correct format of commands"<<endl;
+         cout<<"imageops -a l1 l2"<<endl;
+         cout<<"imageops -s l1 l2"<<endl;
+         cout<<"imageops -i l1"<<endl;
+         cout<<"imageops -l l1 l2"<<endl;
+         cout<<"imageops -t l1 f"<<endl;
+         return 0;
+	}else if(argc == 3){
       
-        //create bitstream
+      if(string(argv[1]).compare("-i")==0){
+         string str = string(argv[1]) ;
+         Image i(str);
+         Image b=!i;
+         
+         b.save( "result.pgm");
+         return 1;
+      }else{
+         cout<<"Enter correct format of commands"<<endl;
+         cout<<"imageops -a l1 l2"<<endl;
+         cout<<"imageops -s l1 l2"<<endl;
+         cout<<"imageops -i l1"<<endl;
+         cout<<"imageops -l l1 l2"<<endl;
+         cout<<"imageops -t l1 f"<<endl;
+         return 0;
+      }
+      
+   }else{
+       if(string(argv[1]).compare("-a")==0){
+         string stra= string(argv[1]);
+         string strb = string(argv[2]);
+         Image a(stra);
+         Image b(strb);
+         Image sum = a + b;
+         
+         b.save("result.pgm");
+         return 1;
+      }else if(string(argv[1]).compare("-s")==0){
+         string stra= string(argv[1]);
+         string strb = string(argv[2]);
+         Image a(stra);
+         Image b(strb);
+         Image diff = a - b;
+         
+         diff.save("result.pgm");
+         return 1;
+      }else if(string(argv[1]).compare("-l")==0){
+         string stra= string(argv[1]);
+         string strb = string(argv[2]);
+         Image a(stra);
+         Image b(strb);
+         Image mask = a / b;
+         
+         mask.save("result.pgm");
+         return 1;
+      } else if(string(argv[1]).compare("-t")==0){
+         string stra= string(argv[1]);
+         
+         int f ;
+         std::stringstream str(argv[2]); 
+          
+         str >> f;
+         Image a(stra);
+         
+         Image t = a*f;
+         
+         t.save("result.pgm");
+         return 1;
+      }
+      else{
+         cout<<"Enter correct format of commands"<<endl;
+         cout<<"imageops -a l1 l2"<<endl;
+         cout<<"imageops -s l1 l2"<<endl;
+         cout<<"imageops -i l1"<<endl;
+         cout<<"imageops -l l1 l2"<<endl;
+         cout<<"imageops -t l1 f"<<endl;
+         return 0;
+      }
+      
+   }
    
-   bitPack(output, argv[1]);
+  
+  
+   
      
-}  //create a method to extract file. 
+}  
   
