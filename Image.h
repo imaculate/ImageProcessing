@@ -1,7 +1,6 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 #include <memory>
-#include <iostream>
 #include <string>
 using namespace std;
 class iterator;

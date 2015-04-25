@@ -1,5 +1,9 @@
 #include "Image.h"
 #include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include "Image.h"
 
 using namespace std;
 using namespace MSHIMA001;

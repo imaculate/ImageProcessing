@@ -2,9 +2,8 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <functional>
 #include "Image.h"
-
+#include "iterator.h"
 
 
 
