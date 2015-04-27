@@ -44,6 +44,11 @@ MSHIMA001::Image::Iterator::Iterator(const Iterator& N){
                return *this;
          }
          
+         MSHIMA001::Image::Iterator&  MSHIMA001::Image::Iterator::operator+=(int n){
+            ptr = ptr + n;
+            return *this;
+         }
+         
          
          
          

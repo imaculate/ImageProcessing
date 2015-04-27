@@ -2,6 +2,7 @@
 #define IMAGE_H
 #include <memory>
 #include <string>
+#include "Matrix.h"
 using namespace std;
 
 
@@ -71,6 +72,7 @@ class Image{
          const Iterator& operator --();
           unsigned char& operator *();
          bool operator !=( const Iterator& N);
+         Iterator&  operator+=(int n);
         //Iterator&  operator=(int&& N );
          
           
@@ -88,6 +90,7 @@ class Image{
       Image operator-(const Image& N );
       Image operator/(const Image& N );
       Image operator*(int f );
+      Image operator%(MSHIMA001::Matrix g );
       /*ofstream& operator<<(const Image& N );
       ofstream& operator>>(const Image& N );*/
    

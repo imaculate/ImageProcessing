@@ -3,6 +3,7 @@
 #include <sstream>
 #include <iostream>
 #include "Image.h"
+#include "Matrix.h"
 
 
 
@@ -22,6 +23,7 @@ int main(int argc, char**  argv) {
          cout<<"imageops -i l1"<<endl;
          cout<<"imageops -l l1 l2"<<endl;
          cout<<"imageops -t l1 f"<<endl;
+          cout<<"imageops -f l1 g"<<endl;
          return 1;
 	}else if(argc == 3){
       
@@ -30,7 +32,7 @@ int main(int argc, char**  argv) {
          Image i(str);
          Image b=!i;
          
-         b.save( "result.pgm");
+         b.save( "invert-result.pgm");
          return 0;
       }else{
          cout<<"Enter correct format of commands"<<endl;
@@ -39,6 +41,7 @@ int main(int argc, char**  argv) {
          cout<<"imageops -i l1"<<endl;
          cout<<"imageops -l l1 l2"<<endl;
          cout<<"imageops -t l1 f"<<endl;
+          cout<<"imageops -f l1 g"<<endl;
          return 1;
       }
       
@@ -54,7 +57,7 @@ int main(int argc, char**  argv) {
          Image b(strb);
          Image sum = a + b;
          cout<<"Done"<<endl;
-         sum.save("result.pgm");
+         sum.save("add-result.pgm");
          return 0;
       }else if(string(argv[1]).compare("-s")==0){
          string stra= string(argv[2]);
@@ -63,7 +66,7 @@ int main(int argc, char**  argv) {
          Image b(strb);
          Image diff = a - b;
          
-         diff.save("result.pgm");
+         diff.save("sub-result.pgm");
          return 0;
       }else if(string(argv[1]).compare("-l")==0){
          string stra= string(argv[2]);
@@ -72,7 +75,7 @@ int main(int argc, char**  argv) {
          Image b(strb);
          Image mask = a / b;
          
-         mask.save("result.pgm");
+         mask.save("mask-result.pgm");
          return 0;
       } else if(string(argv[1]).compare("-t")==0){
          string stra= string(argv[2]);
@@ -85,9 +88,41 @@ int main(int argc, char**  argv) {
          
          Image t = a*f;
          
-         t.save("result.pgm");
+         t.save("theshold-result.pgm");
+         return 0;
+      }else if(string(argv[1]).compare("-f")==0){
+         string stra= string(argv[2]);
+         Image a(stra);
+         //threshold
+         int N;
+         MSHIMA001::Matrix g;
+          
+         string strb=  string(argv[3]); 
+         ifstream file(strb, ios::in);
+         if(file.is_open()){
+               
+               file>>N;
+               g.N = N;
+               int n;
+               for(int i = 0; i< N*N; i++){
+                  file>>i;
+                  g.vec.push_back(i);
+                  
+               }
+               
+         }else{
+            cout<<"File does not exist"<<endl;
+         }
+          
+         
+         
+         
+         Image f = a%g;
+         
+         f.save("filter-result.pgm");
          return 0;
       }
+
       else{
          cout<<"Enter correct format of commands"<<endl;
          cout<<"imageops -a l1 l2"<<endl;
@@ -95,6 +130,7 @@ int main(int argc, char**  argv) {
          cout<<"imageops -i l1"<<endl;
          cout<<"imageops -l l1 l2"<<endl;
          cout<<"imageops -t l1 f"<<endl;
+          cout<<"imageops -f l1 g"<<endl;
          return 1;
       }
       

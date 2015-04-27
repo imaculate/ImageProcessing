@@ -1,4 +1,5 @@
 #include "Image.h"
+#include "Matrix.h"
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -57,7 +58,7 @@ MSHIMA001::Image::Image(const Image& N):width(N.width), height(N.height){
       
             
      
-      buffer[j] =  N.data.get()[j];
+      buffer[j] =  N.data[j];
             
             
             
@@ -168,29 +169,30 @@ bool  MSHIMA001::Image::load(std::string fileName){
                cout<<line<<endl;
                istringstream iss(line);
             
-               iss >> w;
                iss >> h;
+               iss >> w;
             
                width = w;
-               height = h;
+               height =  h;
             }
             
-         
          }
          getline(file ,line);
          
+         cout<<line<<endl;
       }
+      
       cout<<"height "<<height<<"width "<< width<<endl;
       int64_t l = h*w;
       cout<<l<<endl;
         
-      
-      unsigned char buffer[l];
+      data.reset(new unsigned char[width*height]);
+  //    unsigned char buffer[l];
    
      skipws(file);
          
       cout<<"Done with header info"<<endl;
-      file.read((char*)buffer, w*h);
+      file.read((char*)&data[0], w*h);
         if (file)
       std::cout << "all characters read successfully."<<file.gcount()<<endl;
     else
@@ -199,7 +201,7 @@ bool  MSHIMA001::Image::load(std::string fileName){
          
        
          
-       data.reset(buffer);
+    //   data.reset(buffer);
       
      
         
@@ -228,16 +230,21 @@ bool  MSHIMA001::Image::load(std::string fileName){
 void MSHIMA001::Image::save(std::string fileName ){
    cout<<"saving"<<endl;
    ofstream head(fileName, ios::out|ios::binary);
-   if(head.is_open()){
+   if(head){
       head<<"P5"<<endl;
       head<<"# this is result image saved!"<<endl;
-      head<< width<< " "<< height<< endl;
+      head<< height<< " "<< width<< endl;
       head<<"255"<<endl;
     
       
        
-      unsigned char* byte = data.get();
-      head.write((char*)byte,width*height);
+      unsigned char byte;// = data.get();
+      for(auto i=this->begin();i!=end();++i){
+         //cout<<int(*i)<<" ";
+         byte  = *i;
+         head.write((char*)&byte,1);
+      }
+      
       
     
       head.close();
@@ -266,7 +273,7 @@ MSHIMA001::Image MSHIMA001::Image::operator+(const Image& N ){;
   
    cout<<"copy constructiong"<<endl;
    if(N.height != height || N.width != width ){
-      cerr<< "Can't add these arrs, dimensions don't match";
+      cerr<< "Can't add these arrs, dimensions don't match"<<endl;
       return *this;
    }
     Image temp(*this);//copy constructor
@@ -287,6 +294,7 @@ MSHIMA001::Image MSHIMA001::Image::operator+(const Image& N ){;
       *beg = check; 
    
    ++beg;
+   ++inStart;
    } 
 
    
@@ -316,7 +324,7 @@ MSHIMA001::Image MSHIMA001::Image::operator-(const Image& N ){
    
       *beg = check; 
       ++beg;
-   
+      ++inStart;
    } 
 
    
@@ -346,6 +354,7 @@ MSHIMA001::Image MSHIMA001::Image::operator/(const Image& N ){
    
        
    ++beg;
+   ++inStart;
    
    } 
 
@@ -360,7 +369,7 @@ MSHIMA001::Image MSHIMA001::Image::operator!(){
 
    while ( beg != end) { 
    
-             
+            // cout<<*beg<<endl;
       
       *beg = 255 - *beg;
    
@@ -398,6 +407,43 @@ MSHIMA001::Image MSHIMA001::Image::operator*(int f ){
    } 
 
    return temp;
+  
+}
+
+MSHIMA001::Image MSHIMA001::Image::operator%(MSHIMA001::Matrix g ){
+
+   /*Image temp(*this);
+   int it = (g.N)/2;
+   Image::Iterator beg = temp.begin(), end = temp.end();
+   while ( beg != end) {
+      //dosomething. 
+         double acc = 0; //accumulator.
+         acc+= *beg * g.vec[N/2];
+         //int index = beg - 
+         
+         for(int i = 1; i< it; i++){
+            
+            
+            /*bool check = (beg>f);
+      if(check){
+         
+         *beg = 255 ;
+      }
+      else{
+            
+         *beg = 0 ;
+      
+      }
+
+            
+         } 
+         
+            
+      ++beg;
+   
+   } 
+
+   return temp;*/
   
 }
 /*ofstream& operator<<(const Image& N ){
