@@ -3,7 +3,8 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include "Image.h"
+
+
 
 using namespace std;
 using namespace MSHIMA001;
@@ -15,8 +16,8 @@ MSHIMA001::Image::Image(){
 
       
       
-}
-MSHIMA001::Image( string fileName){
+
+MSHIMA001::Image::Image( string fileName){
       load(fileName);
       
       
@@ -26,12 +27,11 @@ MSHIMA001::Image( string fileName){
 MSHIMA001::Image::~Image(){ // destructor
 
       for(int m = 0; m< height; m++){
-         for(int n = 0; n< width; n++){
-            delete  &(data[m][n]);
-         }
-         delete data[m];
+         
+         delete[] data.get()[m];
       }
       
+      delete[] data.get();
       data = nullptr;
       
       
@@ -45,58 +45,107 @@ MSHIMA001::Image::~Image(){ // destructor
    //copy constructor
 MSHIMA001::Image::Image(const Image& N):width(N.width), height(N.height){
    
-   unsigned char** arr = N.data.get();
-   data = make_unique<arr>;
+ 
+   unsigned char** buffer =  new unsigned char*[height];
+         
+         unsigned char* row;
+         for(int j =0; j< height; j++){
+            row = new unsigned char[width];
+            for(int k = 0; k< width; k++){
+              row[k] =  N.data.get()[j][k];
+            }
+            buffer[j]= row;
+            
+         
+         }
+          
+
+   
+      data = unique_ptr<buffer>;
 
 }
    
    //move constructor
-MSHIMA001::Image::Image(Image&& N): width(N.width), height(N.height), data(N.data){
-     for(int m = 0; m< height; m++){
-         for(int n = 0; n< width; n++){
-            delete  &(N.data[m][n]);
-         }
-         delete N.data[m];
-      }
-      
+MSHIMA001::Image::Image(Image&& N): width(N.width), height(N.height){
 
+
+
+
+   data = unique_ptr<N.data.get()>;
+   
+     
+      
+   N.height = N.width = 0;
    N.data = nullptr;
    
 }
    
    //assignment operator
    
-MSHIMA001::Image::Image& operator=(const Image& N ){
+MSHIMA001::Image::Image& MSHIMA001::Image::operator=(const Image& N ){
    if(this == &N)
       return *this;
       
+ 
+   
+   if(data != null){
+      for(int m = 0; m< height; m++){
+         
+         delete[] data.get()[m];
+      }
       
+      delete[] data.get();
+}
+   
+        
    width = N.width;
    height  = N.height;
-   data = N.data;
+    unsigned char** buffer =  new unsigned char*[height];
+         
+         unsigned char* row;
+         for(int j =0; j< height; j++){
+            row = new unsigned char[width];
+            for(int k = 0; k< width; k++){
+              row[k] =  N.data.get()[j][k];
+            }
+              
+            buffer[j]= row;
+            
+         
+         }
+     
+
+   
+      data = unique_ptr<buffer>;
+
+
+   
    return *this;
       
 }
    //move assignment operator.
-MSHIMA001::Image::Image& operator=(Image&& N){
+MSHIMA001::Image::Image& MSHIMA001::Image::operator=(Image&& N){
    if(this == &N)
       return *this;
       
+   
+   if(data != null){
+      for(int m = 0; m< height; m++){
+         
+         delete[] data.get()[m];
+      }
+      
+      delete[] data.get();
+}
+
       
    width = N.width;
    height  = N.height;
-   data = N.data;
-   
-   for(int m = 0; m< height; m++){
-         for(int n = 0; n< width; n++){
-            delete[]  &(N.data.get()[m][n]);
-         }
-         delete N.data.get()[m];
-      }
-      
-      
+   data = unique_ptr<N.data.get()>;
    
    N.data = nullptr;
+   N.height = N.width = 0;
+   
    return *this;
 }
    
@@ -140,7 +189,7 @@ bool  MSHIMA001::Image::load(std::string fileName){
          
          }
          
-         this.data = make_unique<buffer>;
+         this.data = unique_ptr<buffer>;
         
           
        file.close();
@@ -187,52 +236,69 @@ bool  MSHIMA001::Image::load(std::string fileName){
    
  }
    
-Image::iterator& MSHIMA001::Image::begin(void){ // etc
-   return  iterator(data.get());
+Image::Iterator& MSHIMA001::Image::begin(void){ // etc
+   return  Iterator(&(data.get()[0][0]));
 
       
    
 }
-Image::iterator& MSHIMA001::Image::end(void){
-   return iterator(&(data.get()[width-1][height-1]));
+Image::Iterator& MSHIMA001::Image::end(void){
+   return Iterator(&(data.get()[width-1][height-1]));
 }
    
-Image& operator+(const Image& N ){
-   Image temp(*this);
+MSHIMA001::Image& MSHIMA001::Image::operator+(const Image& N ){
+   Image temp(*this);//copy constructor
    if(N.height != height || N.width != width ){
       cerr<< "Can't add these images, dimensions don't match";
       return *this;
    }
    
    
-   /*Image::iterator beg = this->begin(), end = this->end();
-   Image::iterator inStart = N.begin(), inEnd = N.end();
+   Image::Iterator beg = temp.begin(), end = temp.end();
+   Image::Iterator inStart = N.begin(), inEnd = N.end();
 
- while ( beg != end) { *beg = *inStart; ++beg; ++inStart; } */
-
-   for(int i = 0; i< height ; i++){
-      for(int j =0; j< width; j++){
-         int check = temp.data[i][j] +B.data[i][j];
+ while ( beg != end) { 
+      int check = *beg + *inStart;
          if(check> 255){
             check = 255;
          }
-         temp.data[i][j] = check;
-         
-      }
-   }
+         *beg = (unsigned char)check;
+
+   
+  } 
+
+   
    
    return temp;
       
       
    
 }
-Image& operator-(const Image& N ){
+/*MSHIMA001::Image& MSHIMA001::Image::operator-(const Image& N ){
    Image temp(*this);
    if(N.height != height || N.width != width ){
       cerr<< "Can't add these images, dimensions don't match";
       return *this;
    }
    
+   /* 
+   Image::Iterator beg = temp.begin(), end = temp.end();
+   Image::Iterator inStart = N.begin(), inEnd = N.end();
+
+ while ( beg != end) { 
+      int check = *beg + *inStart;
+         if(check> 255){
+            check = 255;
+         }
+         *beg = check;
+
+   
+  } 
+
+   
+   
+   return temp;
+
    for(int i = 0; i< height ; i++){
       for(int j =0; j< width; j++){
          int check = temp.data[i][j] -B.data[i][j];
@@ -250,7 +316,7 @@ Image& operator-(const Image& N ){
 
 
 }
-Image& operator/(const Image& N ){
+MSHIMA001::Image& MSHIMA001::Image::operator/(const Image& N ){
     Image temp(*this);
    if(N.height != height || N.width != width ){
       cerr<< "Can't add these images, dimensions don't match";
@@ -270,7 +336,7 @@ Image& operator/(const Image& N ){
    
    return temp;
 }
-Image& operator!(){
+MSHIMA001::Image& MSHIMA001::Image::operator!(){
    Image temp(this.width, this.height);
    for(int i = 0; i< height ; i++){
       for(int j =0; j< width; j++){
@@ -286,7 +352,7 @@ Image& operator!(){
    
 }
 //threshold
-Image& operator*(int f ){
+MSHIMA001::Image& MSHIMA001::Image::operator*(int f ){
    Image temp(this.width, this.height);
    for(int i = 0; i< height ; i++){
       for(int j =0; j< width; j++){
@@ -310,5 +376,5 @@ Image& operator*(int f ){
 ofstream& operator<<(const Image& N ){
 }
 ofstream& operator>>(const Image& N ){
-}
+}*/
    

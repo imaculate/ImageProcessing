@@ -3,15 +3,14 @@
 #include <memory>
 #include <string>
 using namespace std;
-class iterator;
+
 namespace MSHIMA001{
-   class Image
-   {
+class Image{
    private:
    
       int width, height;
       unique_ptr<unsigned char[]> data;
-      friend class iterator;
+      
    
    public:
    
@@ -36,9 +35,51 @@ namespace MSHIMA001{
    Image& operator!();
       bool  load(std::string fileName);
       void save(std::string fileName );
+      
+      class Iterator{
+      private:
+         unsigned char *ptr;
+         
+      // grant private access to Image class functions
+         friend class Image;
+      // construct only via Image class (begin/end)
+      
+         Iterator(unsigned char *p);
+      
+      public:
+       //copy construct is public
+         Iterator(const Iterator& N);
+    
+         // define overloaded ops: *, ++, --, =
+         //destructor
+         ~Iterator();
+         //move constructor
+         Iterator(Iterator&& N); 
+      
+         //assignment operator
+      
+         Iterator& operator=(const Iterator& N );
+         //move assignment operator.
+      
+         Iterator& operator=(Iterator&& N);
+         
+         
+         
+         //++ operator
+         const Iterator& operator ++();
+         const Iterator& operator --();
+         const unsigned char operator *();
+         
+          
+      
+          
+      // other methods for Iterator
+      };
+      
+
    
-      Image::iterator begin(void); // etc
-      Image::iterator end(void);
+      Image::Iterator begin(void); // etc
+      Image::Iterator end(void);
    
       Image& operator+(const Image& N );
       Image& operator-(const Image& N );
@@ -55,9 +96,9 @@ namespace MSHIMA001{
    
    
    
-      class iterator;
          
      
-     }
+     };
      
+     }
 #endif

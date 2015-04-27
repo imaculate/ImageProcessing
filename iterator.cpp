@@ -1,22 +1,20 @@
-#include "iterator.h"
 #include "Image.h"
-MSHIMA001::Image::iterator( const iterator & rhs){
-   ptr = rhs.ptr;
+
+
+
+//copy constructor
+MSHIMA001::Image::Iterator::Iterator(const Iterator& N){
+   ptr = N.ptr;
          
 }
-         MSHIMA001::Image::iterator(u_char *p):ptr(p){
+         MSHIMA001::Image::Iterator::Iterator(unsigned char *p):ptr(p){
          }
-         // define overloaded ops: *, ++, --, =
-         iterator& MSHIMA001::Image::iterator operator=(const iterator & rhs){
-            ptr = rhs.ptr;
-         
-            return *this;
-         }
-         MSHIMA001::Image::~iterator(){
+        
+         MSHIMA001::Image::Iterator::~Iterator(){
             ptr = nullptr;
          }
          //move constructor.
-         MSHIMA001::Image::iterator(iterator&& N){
+         MSHIMA001::Image::Iterator::Iterator(Iterator&& N){
             ptr = N.ptr;
             N = nullptr;
             
@@ -24,7 +22,7 @@ MSHIMA001::Image::iterator( const iterator & rhs){
       
          //assignment operator
       
-         iterator& MSHIMA001::Image::iterator operator=(const iterator& N ){
+         MSHIMA001::Image::Iterator&  MSHIMA001::Image::Iterator::operator=(const Iterator& N ){
                if(this!=&N){
                   ptr  = N.ptr;
                }
@@ -32,7 +30,7 @@ MSHIMA001::Image::iterator( const iterator & rhs){
          }
          //move assignment operator.
       
-         iterator& MSHIMA001::Image::iterator operator=(iterator&& N){
+         MSHIMA001::Image::Iterator&  MSHIMA001::Image::Iterator::operator=(Iterator&& N){
              if(this!=&N){
                   ptr  = N.ptr;
                }
@@ -43,20 +41,14 @@ MSHIMA001::Image::iterator( const iterator & rhs){
          
          
          //++ operator
-         const iterator& MSHIMA001::Image::iterator operator ++(){
+         const  MSHIMA001::Image::Iterator& MSHIMA001::Image::Iterator::operator++(){
             ptr++;
             return *this;
          }
-         //--iterator
-         const MSHIMA001::Image::iterator& operator --(){
+         //--Iterator
+const MSHIMA001::Image::Iterator& MSHIMA001::Image::Iterator::operator--(){
             ptr--;
             return *this;
-         }
-         const MSHIMA001::Image::iterator& operator *(){
-            return ptr;
-         }
-         
-          
-      
-          
-      
+}
+const unsigned char MSHIMA001::Image::Iterator::operator*(){
+ return *ptr;}

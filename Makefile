@@ -8,7 +8,7 @@ imageops:  Image.o  iterator.o Driver.o
 Image.o : Image.cpp Image.h iterator.o
 	$(CC) $(CCFLAGS) -o Image.o -c Image.cpp
 
-iterator.o : iterator.cpp iterator.h 
+iterator.o : iterator.cpp 
 	$(CC) $(CCFLAGS) -o iterator.o -c iterator.cpp
 
 Driver.o : Driver.cpp

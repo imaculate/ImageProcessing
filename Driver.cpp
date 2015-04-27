@@ -3,7 +3,6 @@
 #include <sstream>
 #include <iostream>
 #include "Image.h"
-#include "iterator.h"
 
 
 
@@ -23,7 +22,7 @@ int main(int argc, char**  argv) {
          cout<<"imageops -i l1"<<endl;
          cout<<"imageops -l l1 l2"<<endl;
          cout<<"imageops -t l1 f"<<endl;
-         return 0;
+         return 1;
 	}else if(argc == 3){
       
       if(string(argv[1]).compare("-i")==0){
@@ -32,7 +31,7 @@ int main(int argc, char**  argv) {
          Image b=!i;
          
          b.save( "result.pgm");
-         return 1;
+         return 0;
       }else{
          cout<<"Enter correct format of commands"<<endl;
          cout<<"imageops -a l1 l2"<<endl;
@@ -40,10 +39,10 @@ int main(int argc, char**  argv) {
          cout<<"imageops -i l1"<<endl;
          cout<<"imageops -l l1 l2"<<endl;
          cout<<"imageops -t l1 f"<<endl;
-         return 0;
+         return 1;
       }
       
-   }else{
+   }else {
        if(string(argv[1]).compare("-a")==0){
          string stra= string(argv[1]);
          string strb = string(argv[2]);
@@ -51,8 +50,8 @@ int main(int argc, char**  argv) {
          Image b(strb);
          Image sum = a + b;
          
-         b.save("result.pgm");
-         return 1;
+         sum.save("result.pgm");
+         return 0;
       }else if(string(argv[1]).compare("-s")==0){
          string stra= string(argv[1]);
          string strb = string(argv[2]);
@@ -61,7 +60,7 @@ int main(int argc, char**  argv) {
          Image diff = a - b;
          
          diff.save("result.pgm");
-         return 1;
+         return 0;
       }else if(string(argv[1]).compare("-l")==0){
          string stra= string(argv[1]);
          string strb = string(argv[2]);
@@ -70,7 +69,7 @@ int main(int argc, char**  argv) {
          Image mask = a / b;
          
          mask.save("result.pgm");
-         return 1;
+         return 0;
       } else if(string(argv[1]).compare("-t")==0){
          string stra= string(argv[1]);
          
@@ -83,7 +82,7 @@ int main(int argc, char**  argv) {
          Image t = a*f;
          
          t.save("result.pgm");
-         return 1;
+         return 0;
       }
       else{
          cout<<"Enter correct format of commands"<<endl;
@@ -92,7 +91,7 @@ int main(int argc, char**  argv) {
          cout<<"imageops -i l1"<<endl;
          cout<<"imageops -l l1 l2"<<endl;
          cout<<"imageops -t l1 f"<<endl;
-         return 0;
+         return 1;
       }
       
    }
