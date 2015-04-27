@@ -50,7 +50,7 @@ MSHIMA001::Image::Iterator::Iterator(const Iterator& N){
          
          //++ operator
          const  MSHIMA001::Image::Iterator& MSHIMA001::Image::Iterator::operator++(){
-            ptr++;
+            ++ptr;
             return *this;
          }
          //--Iterator

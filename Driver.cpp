@@ -26,7 +26,7 @@ int main(int argc, char**  argv) {
 	}else if(argc == 3){
       
       if(string(argv[1]).compare("-i")==0){
-         string str = string(argv[1]) ;
+         string str = string(argv[2]) ;
          Image i(str);
          Image b=!i;
          
@@ -75,10 +75,10 @@ int main(int argc, char**  argv) {
          mask.save("result.pgm");
          return 0;
       } else if(string(argv[1]).compare("-t")==0){
-         string stra= string(argv[1]);
+         string stra= string(argv[2]);
          //threshold
          int f ;
-         std::stringstream str(argv[2]); 
+         std::stringstream str(argv[3]); 
           
          str >> f;
          Image a(stra);
