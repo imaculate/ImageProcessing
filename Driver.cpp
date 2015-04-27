@@ -44,17 +44,21 @@ int main(int argc, char**  argv) {
       
    }else {
        if(string(argv[1]).compare("-a")==0){
-         string stra= string(argv[1]);
-         string strb = string(argv[2]);
+         string stra= string(argv[2]);
+         string strb = string(argv[3]);
+         cout<<"Creating first image"<<endl;
          Image a(stra);
+         
+         cout<<"Creating second image"<<endl;
+         cout<<strb<<endl;
          Image b(strb);
          Image sum = a + b;
-         
+         cout<<"Done"<<endl;
          sum.save("result.pgm");
          return 0;
       }else if(string(argv[1]).compare("-s")==0){
-         string stra= string(argv[1]);
-         string strb = string(argv[2]);
+         string stra= string(argv[2]);
+         string strb = string(argv[3]);
          Image a(stra);
          Image b(strb);
          Image diff = a - b;
@@ -62,8 +66,8 @@ int main(int argc, char**  argv) {
          diff.save("result.pgm");
          return 0;
       }else if(string(argv[1]).compare("-l")==0){
-         string stra= string(argv[1]);
-         string strb = string(argv[2]);
+         string stra= string(argv[2]);
+         string strb = string(argv[3]);
          Image a(stra);
          Image b(strb);
          Image mask = a / b;
@@ -72,7 +76,7 @@ int main(int argc, char**  argv) {
          return 0;
       } else if(string(argv[1]).compare("-t")==0){
          string stra= string(argv[1]);
-         
+         //threshold
          int f ;
          std::stringstream str(argv[2]); 
           

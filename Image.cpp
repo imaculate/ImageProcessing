@@ -44,16 +44,18 @@ MSHIMA001::Image::~Image(){ // destructor
    
    //copy constructor
 MSHIMA001::Image::Image(const Image& N):width(N.width), height(N.height){
-   
+   cout<<"In copy constructor"<<endl;
+    cout<<"allocating memory"<<endl;
  
-   unsigned char* buffer =  new unsigned char[width*height];
-         
+   unsigned char* buffer =  new unsigned char[N.width*N.height];
+         cout<<"allocating memory"<<endl;
         
-         for(int j =0; j< height; j++){
+         for(int j =0; j< height*width; j++){
             
-            for(int k = 0; k< width; k++){
-              buffer[(j*height)+k] =  N.data.get()[(j*height)+k];
-            }
+            
+              cout<< N.data.get()[j]<<endl;
+              buffer[j] =  N.data.get()[j];
+            
             
             
          
@@ -91,6 +93,7 @@ MSHIMA001::Image& MSHIMA001::Image::operator=(const Image& N ){
    if(data != nullptr){
      
       delete[] data.get();
+      
 }
    
         
@@ -146,16 +149,20 @@ bool  MSHIMA001::Image::load(std::string fileName){
 
    int  w, h;
  
-   ifstream file(fileName , ios::binary);
+   ifstream file(fileName , ios::in |ios::binary);
    string line;
    
    if (file.is_open()) {
       getline (file,line);
-      while(line!= "255"){
-         if(line.at(0) == '#'){
-            continue;
-         }else{
       
+
+      cout<<"reading header info"<<endl;
+      while(line.compare("255")!=0){
+         //cout<<line<<endl;
+         if(!line.at(0) == '#'){
+            cout<<line<<endl;
+
+          
             istringstream iss(line);
      	
             iss >> w;
@@ -172,7 +179,7 @@ bool  MSHIMA001::Image::load(std::string fileName){
       
      unsigned char* buffer =  new unsigned char[h*w];
          
-         
+         cout<<"Done with header info"<<endl;
             file.read((char*)buffer, w*h);
          
          
@@ -184,8 +191,7 @@ bool  MSHIMA001::Image::load(std::string fileName){
        return true;
         
       
-       }
-   else{
+       }else{
       cout<<"Unable to open file, ensure correct filename"<<endl;	
       return false;	
    }
@@ -201,8 +207,8 @@ bool  MSHIMA001::Image::load(std::string fileName){
 
  }
  void MSHIMA001::Image::save(std::string fileName ){
-  
-   ofstream head(fileName, ios::binary);
+  cout<<"saving"<<endl;
+   ofstream head(fileName, ios::out|ios::binary);
    if(head.is_open()){
       head<<"P5"<<endl;
       head<< width<< " "<< height<< endl;
@@ -233,16 +239,19 @@ MSHIMA001::Image::Iterator MSHIMA001::Image::end(void) const{
    return Iterator(&(data.get()[width*height]));
 }
    
-MSHIMA001::Image MSHIMA001::Image::operator+(const Image& N ){
+MSHIMA001::Image MSHIMA001::Image::operator+(const Image& N ){;
+   cout<<"Adding"<<endl;
    Image temp(*this);//copy constructor
+   cout<<"copy constructiong"<<endl;
    if(N.height != height || N.width != width ){
       cerr<< "Can't add these arrs, dimensions don't match";
       return *this;
    }
    
-   
+     cout<<"iterators creating"<<endl;
    Image::Iterator beg = temp.begin(), end = temp.end();
    Image::Iterator inStart = N.begin(), inEnd = N.end();
+   cout<<"iterators created"<<endl;
 
  while ( beg != end) { 
    
