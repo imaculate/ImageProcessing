@@ -4,6 +4,7 @@
 #include <string>
 using namespace std;
 
+
 namespace MSHIMA001{
 class Image{
    private:
@@ -14,8 +15,8 @@ class Image{
    
    public:
    
-      Image(); // default constructor - define in .cpp
-      Image(int w, int h, string fileName);
+      Image(int w, int h); // default constructor - define in .cpp
+      Image( string fileName);
       ~Image(); // destructor - define in .cpp file
    
    //copy constructor
@@ -32,7 +33,7 @@ class Image{
       Image& operator=(Image&& N);
    
    //method to read input files
-   Image& operator!();
+   Image operator!();
       bool  load(std::string fileName);
       void save(std::string fileName );
       
@@ -68,7 +69,9 @@ class Image{
          //++ operator
          const Iterator& operator ++();
          const Iterator& operator --();
-         const unsigned char operator *();
+          unsigned char& operator *();
+         bool operator !=( const Iterator& N);
+        //Iterator&  operator=(int&& N );
          
           
       
@@ -78,15 +81,15 @@ class Image{
       
 
    
-      Image::Iterator begin(void); // etc
-      Image::Iterator end(void);
+      Image::Iterator begin(void) const; // etc
+      Image::Iterator end(void) const;
    
-      Image& operator+(const Image& N );
-      Image& operator-(const Image& N );
-      Image& operator/(const Image& N );
-      Image& operator*(int f );
-      ofstream& operator<<(const Image& N );
-      ofstream& operator>>(const Image& N );
+      Image operator+(const Image& N );
+      Image operator-(const Image& N );
+      Image operator/(const Image& N );
+      Image operator*(int f );
+      /*ofstream& operator<<(const Image& N );
+      ofstream& operator>>(const Image& N );*/
    
    
    

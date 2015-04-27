@@ -19,6 +19,10 @@ MSHIMA001::Image::Iterator::Iterator(const Iterator& N){
             N = nullptr;
             
          }
+          /*MSHIMA001::Image::Iterator&  MSHIMA001::Image::Iterator::operator=(int&& N ){
+            *ptr = (unsigned char)N;
+            return *this;
+          }*/
       
          //assignment operator
       
@@ -29,6 +33,8 @@ MSHIMA001::Image::Iterator::Iterator(const Iterator& N){
                return *this;
          }
          //move assignment operator.
+         
+         
       
          MSHIMA001::Image::Iterator&  MSHIMA001::Image::Iterator::operator=(Iterator&& N){
              if(this!=&N){
@@ -37,6 +43,8 @@ MSHIMA001::Image::Iterator::Iterator(const Iterator& N){
                N = nullptr;
                return *this;
          }
+         
+         
          
          
          
@@ -50,5 +58,9 @@ const MSHIMA001::Image::Iterator& MSHIMA001::Image::Iterator::operator--(){
             ptr--;
             return *this;
 }
-const unsigned char MSHIMA001::Image::Iterator::operator*(){
+unsigned char& MSHIMA001::Image::Iterator::operator*(){
  return *ptr;}
+ 
+ bool  MSHIMA001::Image::Iterator::operator!=( const Iterator& N){
+   return (ptr != N.ptr);
+ }

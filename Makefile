@@ -2,11 +2,11 @@ CC=g++
 CCFLAGS=-std=c++11
 
 imageops:  Image.o  iterator.o Driver.o  
-	$(CC) $(CCFLAGS) Driver.o Image.o   -o imageops
+	$(CC) $(CCFLAGS) Driver.o Image.o iterator.o   -o imageops
    
 
 Image.o : Image.cpp Image.h iterator.o
-	$(CC) $(CCFLAGS) -o Image.o -c Image.cpp
+	$(CC) $(CCFLAGS) -o Image.o -c Image.cpp 
 
 iterator.o : iterator.cpp 
 	$(CC) $(CCFLAGS) -o iterator.o -c iterator.cpp
