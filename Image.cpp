@@ -80,9 +80,23 @@ cout<<"In move "<<endl;
 
 
 
-   data.reset(N.data.get());
    
+   unsigned char* buffer  = new unsigned char[N.width*N.height];
+   for(int j =0; j< height*width; j++){
+      
+            
      
+      buffer[j] =  N.data[j];
+            
+            
+            
+         
+   }
+          
+  
+   
+   data.reset(buffer);
+
       
    N.height = N.width = 0;
    N.data = nullptr;
@@ -143,7 +157,22 @@ cout<<"in move op"<<endl;
       
    width = N.width;
    height  = N.height;
-    data.reset(N.data.get());
+    unsigned char* buffer = new unsigned char[width*height];
+         
+   for(int j =0; j< height*width; j++){
+            
+          
+      buffer[j] =  N.data[j];
+            
+            
+            
+         
+   }
+          
+     
+
+   
+   data.reset(buffer);
    
    N.data = nullptr;
    N.height = N.width = 0;
