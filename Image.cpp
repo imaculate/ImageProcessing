@@ -4,25 +4,28 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <memory>
 
 
 
 using namespace std;
-using namespace MSHIMA001;
+namespace MSHIMA001{
 
 
-MSHIMA001::Image::Image(int w, int h):width(w), height(h){
+Image::Image(int w, int h, unsigned char* buffer):width(w), height(h){
    
-   unsigned char b[w*h];
+  
    
-   data.reset(b);
+   data.reset(buffer);
+ 
+   
 }
 
 
       
       
 
-MSHIMA001::Image::Image( string fileName){
+Image::Image( string fileName){
    load(fileName);
    
       
@@ -30,7 +33,7 @@ MSHIMA001::Image::Image( string fileName){
 }
 
 
-MSHIMA001::Image::~Image(){ // destructor
+Image::~Image(){ // destructor
 
       
       
@@ -46,7 +49,7 @@ MSHIMA001::Image::~Image(){ // destructor
 }
    
    //copy constructor
-MSHIMA001::Image::Image(const Image& N):width(N.width), height(N.height){
+Image::Image(const Image& N):width(N.width), height(N.height){
    cout<<"In copy constructor"<<endl;
    cout<<"allocating memory"<<endl;
  
@@ -72,7 +75,7 @@ MSHIMA001::Image::Image(const Image& N):width(N.width), height(N.height){
 }
    
    //move constructor
-MSHIMA001::Image::Image(Image&& N): width(N.width), height(N.height){
+Image::Image(Image&& N): width(N.width), height(N.height){
 
 
 
@@ -88,7 +91,7 @@ MSHIMA001::Image::Image(Image&& N): width(N.width), height(N.height){
    
    //assignment operator
    
-MSHIMA001::Image& MSHIMA001::Image::operator=(const Image& N ){
+Image& Image::operator=(const Image& N ){
    if(this == &N)
       return *this;
       
@@ -126,7 +129,7 @@ MSHIMA001::Image& MSHIMA001::Image::operator=(const Image& N ){
       
 }
    //move assignment operator.
-MSHIMA001::Image& MSHIMA001::Image::operator=(Image&& N){
+Image& Image::operator=(Image&& N){
    if(this == &N)
       return *this;
       
@@ -148,7 +151,7 @@ MSHIMA001::Image& MSHIMA001::Image::operator=(Image&& N){
 }
    
    //method to read input files
-bool  MSHIMA001::Image::load(std::string fileName){
+bool  Image::load(std::string fileName){
 
    int  w, h;
  
@@ -227,7 +230,7 @@ bool  MSHIMA001::Image::load(std::string fileName){
       
 
 }
-void MSHIMA001::Image::save(std::string fileName ){
+void Image::save(std::string fileName ){
    cout<<"saving"<<endl;
    ofstream head(fileName, ios::out|ios::binary);
    if(head){
@@ -258,17 +261,17 @@ void MSHIMA001::Image::save(std::string fileName ){
    
 }
    
-MSHIMA001::Image::Iterator MSHIMA001::Image::begin(void) const{ // etc
+Image::Iterator Image::begin(void) const{ // etc
    return  Iterator(&(data.get()[0]));
 
        
    
 }
-MSHIMA001::Image::Iterator MSHIMA001::Image::end(void) const{
+Image::Iterator Image::end(void) const{
    return Iterator(&(data.get()[width*height]));
 }
    
-MSHIMA001::Image MSHIMA001::Image::operator+(const Image& N ){;
+Image Image::operator+(const Image& N ){;
    cout<<"Adding"<<endl;
   
    cout<<"copy constructiong"<<endl;
@@ -304,7 +307,7 @@ MSHIMA001::Image MSHIMA001::Image::operator+(const Image& N ){;
       
    
 }
-MSHIMA001::Image MSHIMA001::Image::operator-(const Image& N ){
+Image Image::operator-(const Image& N ){
    Image temp(*this);
    if(N.height != height || N.width != width ){
       cerr<< "Can't add these arrs, dimensions don't match";
@@ -332,7 +335,7 @@ MSHIMA001::Image MSHIMA001::Image::operator-(const Image& N ){
    return temp;
 
 }
-MSHIMA001::Image MSHIMA001::Image::operator/(const Image& N ){
+Image Image::operator/(const Image& N ){
    Image temp(*this);
    if(N.height != height || N.width != width ){
       cerr<< "Can't add these arrs, dimensions don't match";
@@ -360,7 +363,7 @@ MSHIMA001::Image MSHIMA001::Image::operator/(const Image& N ){
 
    return temp;
 }
-MSHIMA001::Image MSHIMA001::Image::operator!(){
+Image Image::operator!(){
    Image temp(*this);
   
    cout<<"Inverting"<<endl;
@@ -385,7 +388,7 @@ MSHIMA001::Image MSHIMA001::Image::operator!(){
    
 }
 //threshold
-MSHIMA001::Image MSHIMA001::Image::operator*(int f ){
+Image Image::operator*(int f ){
 
    Image temp(*this);
    Image::Iterator beg = temp.begin(), end = temp.end();
@@ -410,7 +413,7 @@ MSHIMA001::Image MSHIMA001::Image::operator*(int f ){
   
 }
 
-MSHIMA001::Image MSHIMA001::Image::operator%(MSHIMA001::Matrix g ){
+Image Image::operator%(Matrix g ){
 
    /*Image temp(*this);
    int it = (g.N)/2;
@@ -424,16 +427,15 @@ MSHIMA001::Image MSHIMA001::Image::operator%(MSHIMA001::Matrix g ){
          for(int i = 1; i< it; i++){
             
             
-            /*bool check = (beg>f);
-      if(check){
+            bool check = (beg>f);
+         if(check){
          
-         *beg = 255 ;
-      }
-      else{
+            acc += (*beg + index )g.vec[index]
+         }else{
             
-         *beg = 0 ;
+            *beg = 0 ;
       
-      }
+         }
 
             
          } 
@@ -446,8 +448,125 @@ MSHIMA001::Image MSHIMA001::Image::operator%(MSHIMA001::Matrix g ){
    return temp;*/
   
 }
-/*ofstream& operator<<(const Image& N ){
-}
-ofstream& operator>>(const Image& N ){
-}*/
+ostream& operator<<(ostream& head, const Image& N ){
+
+
+   if(head){
+      head<<"P5"<<endl;
+      head<<"# this is result image saved!"<<endl;
+      head<< N.height<< " "<< N.width<< endl;
+      head<<"255"<<endl;
+    
+      
+       
+      unsigned char byte;// = data.get();
+      for(auto i=N.begin();i!=N.end();++i){
+         //cout<<int(*i)<<" ";
+         byte  = *i;
+         head.write((char*)&byte,1);
+      }
+      
+      
+    
+     
+      return head;
+   }
+   else{
+      cout<<"Unable to open file"<<endl;
+   }
+
+
+
    
+   
+   
+}
+istream& operator>>( istream& file,  Image& N ){
+    string line;
+    int h,w;
+   
+   if (file) {
+      getline (file,line);
+      
+   
+      cout<<"reading header info"<<endl;
+      while(line.compare("255")!=0){
+        
+         if(line.at(0)!='#'){
+         
+            
+            if(line.compare("P5")!=0){
+               cout<<line<<endl;
+               istringstream iss(line);
+            
+               iss >> h;
+               iss >> w;
+            
+               N.width = w;
+               N.height =  h;
+            }
+            
+         }
+         getline(file ,line);
+         
+         cout<<line<<endl;
+      }
+      
+      cout<<"height "<<N.height<<"width "<< N.width<<endl;
+      int64_t l = h*w;
+      cout<<l<<endl;
+        
+      N.data.reset(new unsigned char[N.width*N.height]);
+  //    unsigned char buffer[l];
+   
+     skipws(file);
+         
+      cout<<"Done with header info"<<endl;
+      file.read((char*)(&(N.data[0])), w*h);
+        if (file)
+      std::cout << "all characters read successfully."<<file.gcount()<<endl;
+    else
+      std::cout << "error: only " << file.gcount() << " could be read"<<endl;
+         
+         
+       
+         
+    //   data.reset(buffer);
+      
+     
+        
+          
+    
+        
+      return file;
+        
+      
+   }
+   else{
+      cout<<"Unable to open file, ensure correct filename"<<endl;	
+      return file;	
+   }
+
+               
+   
+      
+              
+  
+   
+
+   
+}
+
+bool MSHIMA001::Image::operator==(const Image& N) {
+   if(sizeof(N.data.get())!= sizeof(data.get()))
+      return false;
+      
+   for(int i = 0; i< sizeof(data.get()); i++){
+      if(data[i]!= N.data[i])
+         return false;
+      
+   }
+   return true;
+}
+   
+}

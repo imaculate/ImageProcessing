@@ -2,6 +2,7 @@
 #define IMAGE_H
 #include <memory>
 #include <string>
+#include <iostream>
 #include "Matrix.h"
 using namespace std;
 
@@ -9,14 +10,18 @@ using namespace std;
 namespace MSHIMA001{
 class Image{
    private:
-   
       int width, height;
       unique_ptr<unsigned char[]> data;
-      
-   
+ 
    public:
+      friend ostream& operator<<(ostream& head, const Image& N );
+     
+      friend istream& operator>>( istream& file,  Image& N );
+      
+        bool operator==(const Image& N);
    
-      Image(int w, int h); // default constructor - define in .cpp
+
+      Image(int w, int h, unsigned char* buffer); // default constructor - define in .cpp
       Image( string fileName);
       ~Image(); // destructor - define in .cpp file
    
@@ -73,6 +78,7 @@ class Image{
           unsigned char& operator *();
          bool operator !=( const Iterator& N);
          Iterator&  operator+=(int n);
+         
         //Iterator&  operator=(int&& N );
          
           
@@ -91,10 +97,8 @@ class Image{
       Image operator/(const Image& N );
       Image operator*(int f );
       Image operator%(MSHIMA001::Matrix g );
-      /*ofstream& operator<<(const Image& N );
-      ofstream& operator>>(const Image& N );*/
    
-   
+         
    
    
    
