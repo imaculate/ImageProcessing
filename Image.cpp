@@ -76,7 +76,7 @@ Image::Image(const Image& N):width(N.width), height(N.height){
    
    //move constructor
 Image::Image(Image&& N): width(N.width), height(N.height){
-
+cout<<"In move "<<endl;
 
 
 
@@ -130,6 +130,7 @@ Image& Image::operator=(const Image& N ){
 }
    //move assignment operator.
 Image& Image::operator=(Image&& N){
+cout<<"in move op"<<endl;
    if(this == &N)
       return *this;
       

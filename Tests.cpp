@@ -25,12 +25,14 @@ TEST_CASE( "testing on the test case u1, u2", "trial.txt") {
       buffer1[i] = rand()%160 ; //this should be in the upperhalf to be 255 after thresholding
    }
     Image m(4,4, buffer1);
-    
+     cout<<"m1"<<endl;
     Image m1 = m*160;
     
     
-    
+     cout<<"m2"<<endl;
    Image m2 = !m1;// asssignment operator
+   
+    cout<<"m3"<<endl;
    Image m3 = !m2;
 
     REQUIRE( m3 == m1 );//test for invert, double invert returns the original one.
@@ -41,10 +43,13 @@ TEST_CASE( "testing on the test case u1, u2", "trial.txt") {
       buffer0[i] = 255;
    }
    Image u0(4,4, buffer0); // a white image
-   Image u ( m + u0);//move constructor
+   
+   cout<<"u"<<endl;
+   Image u = ( m + u0);//move constructor
    
    REQUIRE(u == u0);//test that addition wraps around
    
+    cout<<"r"<<endl;
    Image r((m2 + m1)*200);
    
    REQUIRE(r == u0); //test for threshold, an image plus its inverse gives the white image.
