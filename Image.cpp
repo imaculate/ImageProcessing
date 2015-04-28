@@ -53,8 +53,8 @@ Image::Image(const Image& N):width(N.width), height(N.height){
    cout<<"In copy constructor"<<endl;
    cout<<"allocating memory"<<endl;
  
-   unsigned char buffer[N.width*N.height];
-   cout<<"allocating memory"<<endl;
+   unsigned char* buffer  = new unsigned char[N.width*N.height];
+  
    
         
    for(int j =0; j< height*width; j++){
@@ -106,12 +106,12 @@ Image& Image::operator=(const Image& N ){
         
    width = N.width;
    height  = N.height;
-   unsigned char buffer[width*height];
+   unsigned char* buffer = new unsigned char[width*height];
          
    for(int j =0; j< height*width; j++){
             
           
-      buffer[j] =  N.data.get()[j];
+      buffer[j] =  N.data[j];
             
             
             

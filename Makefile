@@ -15,7 +15,7 @@ Driver.o : Driver.cpp Matrix.h
 	$(CC) $(CCFLAGS) -o Driver.o -c Driver.cpp
 
 test: Tests.o 
-	$(CC) Tests.o Image.o -o test
+	$(CC) Tests.o Image.o iterator.o  -o test
 
 
 Tests.o: Tests.cpp

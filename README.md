@@ -1,20 +1,19 @@
 Author: Imaculate Mosha
 
-Date: 6th April 2015
-Name: A huffman encoding algorithm. 
+Date: 28th April 2015
+Name: An Image Processing tool.  
 
 
 Description: 
-This assignment is written to in responce to answer assignment 3 question to create a huffman encoding compression algorithm.   
-It reads a file and creates a huffman tree used to compress the file. It then produces an output file from the 
-huffman table. The compressed file is saved as a bitstream in <out>.bin file.It also provides a method to
-extract the encoded string from the binary file.  
+This assignment is written to in responce to answer assignme nt 4 question to use class structures to manipulate pgm images.
+Operators such as +, ! , -, have been overloaded in the Image class to perform operations such as addition, threshold, mask , invert among others. Also iterator class has been defined as a friend
+to Image to access its private variables. The result of each operation will be written to a result file.
 
 Instructions: Extract the tar file. Navigate to the destination folder from the command line. 
-Enter make
+Enter make to compile
 
-Run( huffencode <inputfile> <outputfile> )
-eg( huffencode test1 test1out)
+Run( imageops <option> <parameters> )
+eg( imageops -a  Lenna_stanard.pgm Lenna_hat_mask.pgm)
 
 For unit testing :
 compile with (make test)
@@ -24,18 +23,15 @@ run test.
 
 List of files: 
 
-HuffmanTree.h -header file for HuffmanTree class.
-HuffmanTree.cpp -defines HuffmanTree class methods .
-HuffmanNode.h - header file for HuffmanNode class.
-HuffmanNode.cpp - defines HuffmanNode class methods.
-Driver.cpp -driver file for the program
-Makefile - used to run the program.
-test1.txt test2.txt - used for unit testing
+Image.h -header file for Image, iterator
+Matrix.h - for filtering.
+Image.cpp  for image manipulation.
+iterator.cpp - for image iterators.
+Tests.cpp - for unit testing.
+Driver.cpp
 
 
 Output format.
 
-<out>.hdr -header containing frequency table
-<out>.data - header containing number of bytes in bitstream
-<out>.bin - binary file containing bitstream
-<out>.txt - ascii file containing encoded string in plain text. 
+<operation-result.pgm>
+eg, <add-result.pgm>

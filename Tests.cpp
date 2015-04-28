@@ -19,21 +19,39 @@ TEST_CASE( "testing on the test case u1, u2", "trial.txt") {
    //generate random images.
    unsigned char* buffer1 = new unsigned char[16];
    for(int i = 0; i< 8; i++){
-      buffer2[i] = rand()%95  + 160; //this should be in the upperhalf to be 255 after thresholding
+      buffer1[i] = rand()%95  + 160; //this should be in the upperhalf to be 255 after thresholding
    }
    for(int i = 8; i< 16; i++){
-      buffer2[i] = rand()%160 ; //this should be in the upperhalf to be 255 after thresholding
+      buffer1[i] = rand()%160 ; //this should be in the upperhalf to be 255 after thresholding
    }
     Image m(4,4, buffer1);
     
-    m1 = m*160;
+    Image m1 = m*160;
     
-   m2 = !m1;
-   
+    
+    
+   Image m2 = !m1;// asssignment operator
+   Image m3 = !m2;
 
-    REQUIRE(freq['o'] == 1);
+    REQUIRE( m3 == m1 );//test for invert, double invert returns the original one.
+    
+    
+     unsigned char* buffer0 = new unsigned char[16];
+   for(int i = 0; i< 16; i++){
+      buffer0[i] = 255;
+   }
+   Image u0(4,4, buffer0); // a white image
+   Image u ( m + u0);//move constructor
    
-   unsigned char* buffer2 = new unsigned char*[16];
+   REQUIRE(u == u0);//test that addition wraps around
+   
+   Image r((m2 + m1)*200);
+   
+   REQUIRE(r == u0); //test for threshold, an image plus its inverse gives the white image.
+   
+    
+   
+   unsigned char* buffer2 = new unsigned char[16];
    for(int i = 0; i< 16; i++){
       buffer2[i] = rand()% 256;
    }
@@ -42,7 +60,7 @@ TEST_CASE( "testing on the test case u1, u2", "trial.txt") {
    Image o1 = u1 + m1;
     
     
-     unsigned char* buffer3 = new unsigned char*[16];
+     unsigned char* buffer3 = new unsigned char[16];
    for(int i = 0; i< 16; i++){
       buffer2[i] = rand()% 256;
    }
